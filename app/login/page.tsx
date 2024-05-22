@@ -62,7 +62,7 @@ const LoginPage = () => {
               </DialogTitle>
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                  Too bad, I can't help you.
+                  Too bad, I can&apos;t help you.
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
