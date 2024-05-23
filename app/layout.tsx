@@ -7,8 +7,14 @@ import FooterPage from "@/components/Footer/page";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Bazaar",
+  title: "Bazzar",
   description: "A freeport for trading in blackzone",
+  icons: [
+    {
+      url: "/logo.png",
+      href: "/logo.png"
+    }
+  ]
 };
 
 export default function RootLayout({

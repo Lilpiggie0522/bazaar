@@ -33,7 +33,7 @@ const LoginPage = () => {
                         </div>
                         <div className='flex items-center'>
                             <label className='w-20 mr-2'>Password</label>
-                            <TextField id="filled-basic" type='password' label="password" variant="filled" color='success' sx={{"& .MuiInputBase-input": {height: "10px"}}}/>
+                            <TextField id="filled-basic2" type='password' label="password" variant="filled" color='success' sx={{"& .MuiInputBase-input": {height: "10px"}}}/>
                         </div>
                         <div className='mt-8 ml-24'>
                             <Button className='font-semibold' variant="contained">Login</Button>
@@ -44,7 +44,7 @@ const LoginPage = () => {
                         </div>
                         <div className='ml-52'>
                             <Button className='text-black font-sans' sx={{textTransform: "none"}}>
-                                <Link href={"/register"}>Register Account</Link>
+                                <Link href={"/sign-up"}>Register Account</Link>
                             </Button>
                         </div>
                     </div>

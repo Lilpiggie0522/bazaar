@@ -21,7 +21,7 @@ const NavbarPage = () => {
                 <Link href={"/login"}>Login</Link>
               </Button>
               <Button color='inherit'>
-                <Link href={"/register"}>Register</Link>
+                <Link href={"/sign-up"}>Sign-Up</Link>
               </Button>
               <Button color='inherit'>
                 <Link href={"/about"}>About</Link>
