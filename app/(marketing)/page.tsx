@@ -24,7 +24,7 @@ const MarketingPage = () => {
 
   const handleEnterMarket = () => {
     if (loggedIn) {
-      router.push("/market")
+      router.push("/marketplace")
       return
     }
     router.push("/login")

@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,9 +10,19 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { registrationBody, sendRequest } from './(requests)/Post';
 import { useRouter } from 'next/navigation';
 import { Alert } from '@mui/material';
+
+export interface registrationBody {
+  username: string
+  password: string
+  confirm_password: string
+}
+
+export interface requestBody {
+  username: string,
+  password: string
+}
 
 function Copyright(props: any) {
   return (
@@ -41,7 +51,7 @@ export default function SignUp() {
     const {username, password, confirm_password} = user;
     if (!username || !password || !confirm_password) {
       // return NextResponse.json({ error: "username or password cannot be empty" }, { status: 406 })
-      setErrorMessage("username or password cannot be empty")
+      setErrorMessage("username and password cannot be empty")
       return showErrorOps()
     }
     const userRegex = /[^A-Za-z0-9]/
@@ -76,18 +86,29 @@ export default function SignUp() {
 
   function showErrorOps() {
     setShowErrorMessage(true)
-    setTimeout(() => {
-      setShowErrorMessage(false)
-    }, 4000);
+    // setTimeout(() => {
+    //   setShowErrorMessage(false)
+    // }, 4000);
     return false;
   }
   
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     // console.log({
     //   email: data.get('email'),
     //   password: data.get('password'),
     //   confirm_password: data.get('confirm_password'),
     // })
+    async function sendRequest(body: requestBody){
+      const response = await fetch('/api/sign-up', {
+          method: 'POST',
+          headers: {
+              "content-type": "application/json"
+          },
+          body: JSON.stringify(body)
+      })
+      return response
+    }
+
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const username: string = data.get('username')?.toString() as string
@@ -98,26 +119,40 @@ export default function SignUp() {
       password: password,
       confirm_password: confirm_password
     })
+
     if (!stat) {
       return;
     }
 
-    const info: registrationBody = {
+    const details = {
       username: username,
-      password: password,
-      confirm_password: confirm_password
+      password: password
     }
 
-    sendRequest(info).then((response) => {
-      const {message} = response
-      setOkmessage(message)
-      setShowOkMessage(true)
-      setShowErrorMessage(false)
-      setTimeout(() => {
-        router.push("/login")
-      }, 3000);
-    }).catch((error) => console.log(error.message))
-    
+    const response = (await sendRequest(details))
+    const {message} = await response.json()
+    if (!response.ok) {
+      setErrorMessage(message)
+      setShowErrorMessage(true)
+      return
+    }
+    setOkmessage(message)
+    setShowOkMessage(true)
+    setShowErrorMessage(false)
+    setTimeout(() => {
+      router.push("/login")
+    }, 3000);
+
+    // sendRequest(info).then((response) => {
+    //   const {message} = response
+    //   setOkmessage(message)
+    //   setShowOkMessage(true)
+    //   setShowErrorMessage(false)
+    //   setTimeout(() => {
+    //     router.push("/login")
+    //   }, 3000);
+    // }).catch((error) => console.log(error.message))
+    // piGgIE0522!
   };
 
   return (
@@ -159,6 +194,7 @@ export default function SignUp() {
               id="password"
               autoComplete="current-password"
             />
+            <Alert severity="warning">Enter a mix of upper and lower case letters, numbers, and one of the following characters: !@#$%^&*</Alert>
             <TextField
               margin="normal"
               required
