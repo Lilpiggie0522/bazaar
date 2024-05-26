@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import { AppBar, Toolbar, Typography, Stack} from '@mui/material'
 import Image from 'next/image';
@@ -5,6 +6,18 @@ import Link from 'next/link';
 import { Button } from '../ui/button';
 
 const NavbarPage = () => {
+  const handleOnClick = async () => {
+    const response = await fetch("/api/logout", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      }
+    })
+    const data = await response.json()
+    const {message} = data
+    console.log(message)
+  }
+
   return (
     <AppBar position='sticky' color='transparent'>
         <Toolbar>
@@ -25,6 +38,9 @@ const NavbarPage = () => {
               </Button>
               <Button color='inherit'>
                 <Link href={"/about"}>About</Link>
+              </Button>
+              <Button color='inherit' onClick={handleOnClick}>
+                Logout
               </Button>
             </Stack>
         </Toolbar>

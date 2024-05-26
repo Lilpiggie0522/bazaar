@@ -1,7 +1,7 @@
 "use client"
 import { Alert, Button, TextField } from '@mui/material'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -9,12 +9,21 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { getSession } from '@/lib/utils';
 
 const LoginPage = () => {
     const [open, setOpen] = useState(false);
     const [showError, setShowError] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
     const route = useRouter()
+    useEffect(() => {
+      getSession().then((res) => {
+        if (res.ok) {
+          route.push("/marketplace")
+          return
+        }
+      })
+    })
 
     const handleClickOpen = () => {
       setOpen(true);
@@ -39,8 +48,6 @@ const LoginPage = () => {
 
     async function handleOnSubmit(event: React.FormEvent<HTMLFormElement>) {
       event.preventDefault()
-      
-      
       const response = await fetch("/api/login", {
         method: 'POST',
         headers: {
@@ -51,15 +58,26 @@ const LoginPage = () => {
           password: password
         })
       })
-      const data = await response.json()
-      const {message} = data;
       if (!response.ok) {
+        const data = await response.json()
+        const {message} = data
         setErrorMessage(message)
         setShowError(true)
         return
       }
+
       // console.log(message)
       route.push("/marketplace")
+      // const response = await fetch("/api/login", {
+      //   method: 'POST',
+      //   headers: {
+      //     "content-type": "application/json"
+      //   },
+      //   body: JSON.stringify({
+      //     username: username,
+      //     password: password
+      //   })
+      // })
     }
 
     return (

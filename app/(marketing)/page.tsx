@@ -1,11 +1,11 @@
 "use client"
-import React, { useState } from 'react'
 import localFont from "next/font/local";
 import { cn } from '@/lib/utils';
 import { Medal } from 'lucide-react';
 import { Poppins } from 'next/font/google';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { getSession } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 const headingFont = localFont({
   src: "../../public/fonts/font.woff2",
@@ -19,15 +19,14 @@ const textFont = Poppins({
 
 
 const MarketingPage = () => {
-  const [loggedIn, setLoggedIn] = useState(false)
-  const router = useRouter()
-
-  const handleEnterMarket = () => {
-    if (loggedIn) {
-      router.push("/marketplace")
+  const route = useRouter()
+  const handleEnterMarket = async () => {
+    const response = await getSession()
+    if (!response.ok) {
+      route.push("/login")
       return
     }
-    router.push("/login")
+    route.push("/marketplace")
   }
 
   return (

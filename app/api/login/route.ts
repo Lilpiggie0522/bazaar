@@ -1,13 +1,14 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { sql } from '@vercel/postgres'
 import { compare } from 'bcrypt-ts'
+import { loginJwt } from '@/lib'
 
 interface loginRequestBody {
     username: string,
     password: string
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     const body = await req.json()
     // console.log(body)
     if (!userDetailsCheck(body)) {
@@ -19,7 +20,11 @@ export async function POST(req: Request) {
     if (!await dbCredentialCheck(body)) {
         return NextResponse.json({message: "Incorrect password."}, {status: 401})
     }
-    return NextResponse.json({message: "Login successful"}, {status: 200})
+    const res = NextResponse.json({message: "Login successful"}, {status: 200})
+    const cookie = await loginJwt(body)
+    const expires = new Date(Date.now() + 60 * 60 * 1000 * 2)
+    res.cookies.set("session", cookie, {expires: expires, httpOnly: true})
+    return res
 }
 
 async function dbCredentialCheck(body: loginRequestBody) {
