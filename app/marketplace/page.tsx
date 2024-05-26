@@ -2,9 +2,8 @@
 
 import { getSession } from "@/lib/utils"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
 
-export default function marketplacePage() {
+export default function MarketplacePage() {
   const route = useRouter()
   getSession().then((res) => {
     if (!res.ok) {
