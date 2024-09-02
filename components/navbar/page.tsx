@@ -3,9 +3,11 @@ import React from 'react'
 import { AppBar, Toolbar, Typography, Stack} from '@mui/material'
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '../ui/button';
 
 const NavbarPage = () => {
+  const route = useRouter()
   const handleOnClick = async () => {
     const response = await fetch("/api/logout", {
       method: "POST",
@@ -16,6 +18,7 @@ const NavbarPage = () => {
     const data = await response.json()
     const {message} = data
     console.log(message)
+    route.push('/')
   }
 
   return (
