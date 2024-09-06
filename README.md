@@ -1,6 +1,8 @@
 # Login Details for testing:
-username: unsw
-password: Unsw2024!
+username: unsw 
+
+password: Unsw2024! 
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Please note that this project is still under development, more features will be added in the future
