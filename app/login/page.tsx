@@ -16,6 +16,7 @@ const LoginPage = () => {
   const [showError, setShowError] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
   const route = useRouter()
+  
   useEffect(() => {
     getSession().then((res) => {
       if (res.ok) {

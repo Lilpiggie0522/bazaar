@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,6 +12,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/navigation';
 import { Alert } from '@mui/material';
+import { getSession } from '@/lib/utils';
 
 export interface registrationBody {
   username: string
@@ -46,6 +47,15 @@ export default function SignUp() {
   const [showOkMessage, setShowOkMessage] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
   const [showErrorMessage, setShowErrorMessage] = useState(false)
+
+  useEffect(() => {
+    getSession().then((res) => {
+      if (res.ok) {
+        router.push("/marketplace")
+        return
+      }
+    })
+  })
 
   function checkValidUserDetails(user: registrationBody) {
     const {username, password, confirm_password} = user;

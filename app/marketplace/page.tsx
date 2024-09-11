@@ -38,7 +38,7 @@ export default function MarketplacePage() {
         return;
       }
     });
-  }, [route]);
+  });
 
   const ench = [{ value: '0', label: 0 }, { value: '1', label: 1 }, { value: '2', label: 2 }, { value: '3', label: 3 }, { value: '4', label: 4 }];
   const itemTypes = [{ value: 'armor', label: 'Armor' }, { value: 'weapon', label: 'Weapon' }, { value: 'resources', label: 'Resources' }, { value: 'materials', label: 'Materials' }];
@@ -65,6 +65,36 @@ export default function MarketplacePage() {
     setCurrentPage(page);
   };
 
+  type itemTypes = "armor" | "weapon" | "resources" | "materials"
+  type enchantLevel = '0' | '1' | '2' | '3' | '4'
+  type dateRange = [string, string]
+
+  interface formValues {
+    'Item Name': string;
+    'item type': itemTypes;
+    'enchantment': enchantLevel;
+    'quantity': Number;
+    'seller': string;
+    'dateRange': dateRange
+    'price': Number;
+    'upload': any;
+    'description'?: any
+  }
+
+  function handleOnSubmit(form: formValues) {
+    const {
+      'Item Name': itemName,
+      'item type': itemType,
+      'enchantment': enchantment,
+      'quantity': quantity,
+      'seller': seller,
+      'dateRange': dateRange,
+      'price': price,
+      'upload': upload,
+      'description': description   // optional
+    } = form;
+  }
+
   const paginatedCards = cards.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
@@ -84,9 +114,10 @@ export default function MarketplacePage() {
               destroyOnClose: true,
               onCancel: () => console.log('Canceled'),
             }}
-            onFinish={async (values) => {
-              console.log(values);
+            onFinish={async (values: formValues) => {
+              console.log(values)
               message.success('Item listed');
+              handleOnSubmit(values);
               return true;
             }}
           >
@@ -119,6 +150,7 @@ export default function MarketplacePage() {
                 tooltip='Please select enchantment level'
                 rules={[{ required: true, message: 'Please select enchantment level' }]}
               />
+
               <ProFormDigit
                 width='lg'
                 name='quantity'
