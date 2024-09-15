@@ -38,7 +38,7 @@ export default function MarketplacePage() {
         return;
       }
     });
-  });
+  }, []);
 
   const ench = [{ value: '0', label: 0 }, { value: '1', label: 1 }, { value: '2', label: 2 }, { value: '3', label: 3 }, { value: '4', label: 4 }];
   const itemTypes = [{ value: 'armor', label: 'Armor' }, { value: 'weapon', label: 'Weapon' }, { value: 'resources', label: 'Resources' }, { value: 'materials', label: 'Materials' }];
@@ -81,7 +81,7 @@ export default function MarketplacePage() {
     'description'?: any
   }
 
-  function handleOnSubmit(form: formValues) {
+  async function handleOnSubmit(form: formValues) {
     const {
       'Item Name': itemName,
       'item type': itemType,
@@ -93,6 +93,32 @@ export default function MarketplacePage() {
       'upload': upload,
       'description': description   // optional
     } = form;
+
+    const formData = {
+      'name': itemName,
+      'type': itemType,
+      'enchantment': parseInt(enchantment),
+      'quantity': quantity,
+      'seller': seller,
+      'dateRange': dateRange,
+      'price': price,
+      'upload': upload,
+      'description': description 
+    }
+
+    const response: Response = await fetch("/api/addItem", {
+      method: 'POST',
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      message.error(`${error.name}, code: ${error.code}`)
+      return
+    }
+    message.success('Item listed');
   }
 
   const paginatedCards = cards.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -115,8 +141,7 @@ export default function MarketplacePage() {
               onCancel: () => console.log('Canceled'),
             }}
             onFinish={async (values: formValues) => {
-              console.log(values)
-              message.success('Item listed');
+              // console.log(values)
               handleOnSubmit(values);
               return true;
             }}

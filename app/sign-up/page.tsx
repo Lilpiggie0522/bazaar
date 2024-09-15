@@ -55,7 +55,7 @@ export default function SignUp() {
         return
       }
     })
-  })
+  }, [])
 
   function checkValidUserDetails(user: registrationBody) {
     const {username, password, confirm_password} = user;

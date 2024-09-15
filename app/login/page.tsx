@@ -24,7 +24,7 @@ const LoginPage = () => {
         return
       }
     })
-  })
+  }, [])
 
   const handleClickOpen = () => {
     setOpen(true);
