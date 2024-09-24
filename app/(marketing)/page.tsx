@@ -4,8 +4,8 @@ import { cn } from '@/lib/utils';
 import { Medal } from 'lucide-react';
 import { Poppins } from 'next/font/google';
 import { Button } from '@/components/ui/button';
-import { getSession } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import React from "react";
 
 const headingFont = localFont({
   src: "../../public/fonts/font.woff2",
@@ -16,17 +16,12 @@ const textFont = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-
-
 const MarketingPage = () => {
-  const route = useRouter()
-  const handleEnterMarket = async () => {
-    const response = await getSession()
-    if (!response.ok) {
-      route.push("/login")
-      return
-    }
-    route.push("/marketplace")
+  const router = useRouter()
+  function handleEnterMarket(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault()
+    console.log("clicked!")
+    router.push('/market')
   }
 
   return (

@@ -1,3 +1,4 @@
+'use server';
 import { NextRequest, NextResponse } from 'next/server'
 import { sql } from '@vercel/postgres'
 import { compare } from 'bcrypt-ts'
@@ -20,7 +21,7 @@ export async function POST(req: NextRequest) {
     if (!await dbCredentialCheck(body)) {
         return NextResponse.json({message: "Incorrect password."}, {status: 401})
     }
-    const res = NextResponse.json({message: "Login successful"}, {status: 200})
+    const res = NextResponse.json({message: 'Login successful'}, {status: 200});
     const cookie = await loginJwt(body)
     const expires = new Date(Date.now() + 60 * 60 * 1000 * 2)
     res.cookies.set("session", cookie, {expires: expires, httpOnly: true})

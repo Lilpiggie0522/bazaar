@@ -1,30 +1,20 @@
-"use client"
+"use client";
 import { Alert, Button, TextField } from '@mui/material'
-import Link from 'next/link'
-import React, { useEffect } from 'react'
+import Link from 'next/link';
+import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { getSession } from '@/lib/utils';
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
+  const router = useRouter()
   const [open, setOpen] = useState(false);
   const [showError, setShowError] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
-  const route = useRouter()
-  
-  useEffect(() => {
-    getSession().then((res) => {
-      if (res.ok) {
-        route.push("/marketplace")
-        return
-      }
-    })
-  }, [])
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -52,7 +42,7 @@ const LoginPage = () => {
     // console.log(e.target.value)
     setPassword(e.target.value)
   }
-
+  
   async function handleOnSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const response = await fetch("/api/login", {
@@ -65,27 +55,20 @@ const LoginPage = () => {
         password: password
       })
     })
+    // router.push('/market')
+    if (response.ok) {
+      console.log(response)
+      router.push('/market')
+      window.location.reload()
+    }
+
     if (!response.ok) {
       const data = await response.json()
       const { message } = data
       setErrorMessage(message)
       setShowError(true)
       hideErrorMsg();
-      return
     }
-
-    // console.log(message)
-    route.push("/marketplace")
-    // const response = await fetch("/api/login", {
-    //   method: 'POST',
-    //   headers: {
-    //     "content-type": "application/json"
-    //   },
-    //   body: JSON.stringify({
-    //     username: username,
-    //     password: password
-    //   })
-    // })
   }
 
   return (
@@ -106,18 +89,18 @@ const LoginPage = () => {
               {
                 showError &&
                 <div className='mt-8'>
-                    <Alert severity="error" variant='outlined'>{errorMessage}</Alert>
+                  <Alert severity="error" variant='outlined'>{errorMessage}</Alert>
                 </div>
               }
               <div className='mt-8 ml-24'>
                 <Button className='font-semibold' variant="contained" type='submit'>Login</Button>
               </div>
               <div className='ml-52'>
-                <Button className='text-black font-sans' onClick={handleClickOpen} sx={{ textTransform: "none" }}>Forgot your password?</Button>
+                <Button className='text-black font-sans' onClick={handleClickOpen} sx={{ textTransform: "none" }}>Forgot password?</Button>
               </div>
               <div className='ml-52'>
                 <Button className='text-black font-sans' sx={{ textTransform: "none" }}>
-                  <Link href={"/sign-up"}>Register Account</Link>
+                  <Link href={"/sign-up"}>Create an account</Link>
                 </Button>
               </div>
             </div>

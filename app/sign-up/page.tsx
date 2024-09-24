@@ -12,7 +12,6 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/navigation';
 import { Alert } from '@mui/material';
-import { getSession } from '@/lib/utils';
 
 export interface registrationBody {
   username: string
@@ -47,15 +46,6 @@ export default function SignUp() {
   const [showOkMessage, setShowOkMessage] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
   const [showErrorMessage, setShowErrorMessage] = useState(false)
-
-  useEffect(() => {
-    getSession().then((res) => {
-      if (res.ok) {
-        router.push("/marketplace")
-        return
-      }
-    })
-  }, [])
 
   function checkValidUserDetails(user: registrationBody) {
     const {username, password, confirm_password} = user;
@@ -103,11 +93,6 @@ export default function SignUp() {
   }
   
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    // console.log({
-    //   email: data.get('email'),
-    //   password: data.get('password'),
-    //   confirm_password: data.get('confirm_password'),
-    // })
     async function sendRequest(body: requestBody){
       const response = await fetch('/api/sign-up', {
           method: 'POST',

@@ -7,10 +7,10 @@ import { useRouter } from 'next/navigation';
 import { Button } from '../ui/button';
 
 const NavbarPage = () => {
-  const route = useRouter()
-  const handleOnClick = async () => {
+  const router = useRouter()
+  const handleLogOut = async () => {
     const response = await fetch("/api/logout", {
-      method: "POST",
+      method: "GET",
       headers: {
         "content-type": "application/json"
       }
@@ -18,7 +18,8 @@ const NavbarPage = () => {
     const data = await response.json()
     const {message} = data
     console.log(message)
-    route.push('/')
+    router.push('/login')
+    window.location.reload()
   }
 
   return (
@@ -31,18 +32,15 @@ const NavbarPage = () => {
             
             <Stack direction={"row"} spacing={1}>
               <Button color='inherit' asChild>
-                <Link href={"/"}>Home</Link>
+                <Link href={'/'}>Home</Link>
               </Button>
               <Button color='inherit' asChild>
-                <Link href={"/login"}>Login</Link>
+                <Link href={'/login'}>Login</Link>
               </Button>
-              <Button color='inherit'>
-                <Link href={"/sign-up"}>Sign-Up</Link>
-              </Button>
-              <Button color='inherit'>
+              <Button color='inherit' asChild>
                 <Link href={"/about"}>About</Link>
               </Button>
-              <Button color='inherit' onClick={handleOnClick}>
+              <Button color='inherit' onClick={handleLogOut}>
                 Logout
               </Button>
             </Stack>

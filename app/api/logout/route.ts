@@ -1,7 +1,8 @@
-import { logoutJwt } from '@/lib';
-import { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 
-export async function POST(req: NextRequest) {
-    return await logoutJwt(req)
+export async function GET() {
+    const res = NextResponse.json({message: "Logout successful!"}, {status: 200})
+    res.cookies.set("session", "", {expires: Date.now(), httpOnly: true})
+    return res
 }

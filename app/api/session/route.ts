@@ -1,7 +1,7 @@
 import { decrypt } from '@/lib'
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
     const session = request.cookies.get("session")?.value
     if (!session) {
         return NextResponse.json({message: "No cookies found!"}, {status: 401})
@@ -13,5 +13,4 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         return NextResponse.json({message: "Token expired or Incorrect"}, {status: 401})
     }
-
 }

@@ -1,6 +1,5 @@
 'use client';
 import { Button } from '@mui/material';
-import { getSession } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { PlusOutlined } from '@ant-design/icons';
 import {
@@ -24,21 +23,11 @@ import {
   Pagination,
 } from 'antd';
 import enUS from 'antd/lib/locale/en_US';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-export default function MarketplacePage() {
-  const route = useRouter();
+export default function MarketPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
-
-  useEffect(() => {
-    getSession().then((res) => {
-      if (!res.ok) {
-        route.push("/login");
-        return;
-      }
-    });
-  }, []);
 
   const ench = [{ value: '0', label: 0 }, { value: '1', label: 1 }, { value: '2', label: 2 }, { value: '3', label: 3 }, { value: '4', label: 4 }];
   const itemTypes = [{ value: 'armor', label: 'Armor' }, { value: 'weapon', label: 'Weapon' }, { value: 'resources', label: 'Resources' }, { value: 'materials', label: 'Materials' }];

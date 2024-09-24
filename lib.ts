@@ -1,4 +1,4 @@
-import { cookies } from "next/headers"
+"use server";
 import { NextRequest, NextResponse } from "next/server"
 import { SignJWT, jwtVerify } from "jose"
 

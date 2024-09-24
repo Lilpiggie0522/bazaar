@@ -12,13 +12,3 @@ export async function hashPassword(password: string) {
   const hashed = await hash(password, salt)
   return hashed
 }
-
-export const getSession = async() => {
-  const response = await fetch("/api/session", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json"
-    }
-  })
-  return response
-}
