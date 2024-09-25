@@ -1,6 +1,5 @@
 'use client';
 import { Button } from '@mui/material';
-import { useRouter } from "next/navigation";
 import { PlusOutlined } from '@ant-design/icons';
 import {
   ModalForm,
@@ -98,7 +97,7 @@ export default function MarketPage() {
     const response: Response = await fetch("/api/addItem", {
       method: 'POST',
       headers: {
-        "content-type": "application/json"
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(formData)
     });

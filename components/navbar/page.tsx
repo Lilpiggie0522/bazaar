@@ -15,11 +15,10 @@ const NavbarPage = () => {
         "content-type": "application/json"
       }
     })
-    const data = await response.json()
-    const {message} = data
-    console.log(message)
-    router.push('/login')
-    window.location.reload()
+    if (response.ok) {
+      router.push('/login')
+      window.location.reload()
+    }
   }
 
   return (

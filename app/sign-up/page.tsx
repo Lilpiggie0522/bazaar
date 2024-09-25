@@ -97,7 +97,7 @@ export default function SignUp() {
       const response = await fetch('/api/sign-up', {
           method: 'POST',
           headers: {
-              "content-type": "application/json"
+              "Content-Type": "application/json"
           },
           body: JSON.stringify(body)
       })
@@ -137,17 +137,6 @@ export default function SignUp() {
     setTimeout(() => {
       router.push("/login")
     }, 3000);
-
-    // sendRequest(info).then((response) => {
-    //   const {message} = response
-    //   setOkmessage(message)
-    //   setShowOkMessage(true)
-    //   setShowErrorMessage(false)
-    //   setTimeout(() => {
-    //     router.push("/login")
-    //   }, 3000);
-    // }).catch((error) => console.log(error.message))
-    // piGgIE0522!
   };
 
   return (

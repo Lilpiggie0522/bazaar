@@ -48,16 +48,17 @@ const LoginPage = () => {
     const response = await fetch("/api/login", {
       method: 'POST',
       headers: {
-        "content-type": "application/json"
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         username: username,
         password: password
       })
     })
-    // router.push('/market')
+
     if (response.ok) {
-      console.log(response)
+      const data = await response.json();
+      console.log(data)
       router.push('/market')
       window.location.reload()
     }

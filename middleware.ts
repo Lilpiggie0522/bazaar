@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
-import { decrypt } from './lib';  // Assuming decrypt is a function in your lib
+import { decrypt } from './lib';
 
 export async function middleware(request: NextRequest) {
     const path: string = request.nextUrl.pathname;
