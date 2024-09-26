@@ -91,7 +91,7 @@ export default function MarketPage() {
       'dateRange': dateRange,
       'price': price,
       'upload': upload,
-      'description': description 
+      'description': description
     }
 
     const response: Response = await fetch("/api/addItem", {
@@ -112,7 +112,7 @@ export default function MarketPage() {
   const paginatedCards = cards.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
-    <div className='m-3'>
+    <div className='m-3 flex-grow'>
       <div>
         <ConfigProvider locale={enUS}>
           <ModalForm
@@ -249,13 +249,15 @@ export default function MarketPage() {
             </List.Item>
           )}
         />
-        <Pagination
-          current={currentPage}
-          pageSize={itemsPerPage}
-          total={cards.length}
-          onChange={handlePageChange}
-          style={{ marginTop: '16px', textAlign: 'center' }}
-        />
+        <div className='flex justify-center'>
+          <Pagination
+            current={currentPage}
+            pageSize={itemsPerPage}
+            total={cards.length}
+            onChange={handlePageChange}
+            style={{ marginTop: '16px', textAlign: 'center' }}
+          />
+        </div>
       </div>
     </div>
   );

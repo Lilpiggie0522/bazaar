@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import NavbarPage from "@/components/navbar/page";
 import FooterPage from "@/components/Footer/page";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Bazzar",
@@ -24,12 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="h-screen">
-          <NavbarPage />
-            {children}
-          <FooterPage />
-        </div>
+      <body>
+        <NavbarPage />
+        {children}
+        <FooterPage />
       </body>
     </html>
   );
