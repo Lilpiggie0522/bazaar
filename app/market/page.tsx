@@ -112,7 +112,7 @@ export default function MarketPage() {
   const paginatedCards = cards.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
-    <div className='m-3 flex-grow'>
+    <div className='m-3 min-h-screen'>
       <div>
         <ConfigProvider locale={enUS}>
           <ModalForm
