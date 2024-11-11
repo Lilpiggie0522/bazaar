@@ -144,10 +144,10 @@ export default function SignUp() {
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" fontFamily={"cursive"}>
           Sign Up
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }} className="flex flex-col items-center">
           <TextField
             margin="normal"
             required
@@ -183,15 +183,14 @@ export default function SignUp() {
           {showErrorMessage && <Alert severity="error">{`${errorMessage}`}</Alert>}
           <Button
             type="submit"
-            fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 3, mb: 2, fontFamily: "unset", textTransform: "none"}}
           >
             Sign Up
           </Button>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
+      <Copyright />
     </Container>
   )
 }

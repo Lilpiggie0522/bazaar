@@ -88,7 +88,7 @@ const LoginPage = () => {
       }
       <div className='py-20 flex flex-col justify-center items-center'>
         <div className='flex justify-center'>
-          <h3 className='font-bold text-4xl'>Sign in</h3>
+          <h3 className='text-4xl font-cursive'>Sign in</h3>
         </div>
         <form className='pt-5' onSubmit={handleOnSubmit}>
           <div className='flex flex-col justify-center items-center'>
