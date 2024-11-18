@@ -2,15 +2,6 @@
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
 name: continuous-integration
-env:
-  POSTGRES_URL: ${{secrets.POSTGRES_URL}}
-  POSTGRES_PRISMA_URL: ${{secrets.POSTGRES_PRISMA_URL}}
-  POSTGRES_URL_NO_SSL: ${{secrets.POSTGRES_URL_NO_SSL}}
-  POSTGRES_URL_NON_POOLING: ${{secrets.POSTGRES_URL_NON_POOLING}}
-  POSTGRES_USER: ${{secrets.POSTGRES_USER}}
-  POSTGRES_HOST: ${{secrets.POSTGRES_HOST}}
-  POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
-  POSTGRES_DATABASE: ${{secrets.POSTGRES_DATABASE}}
 
 on:
   push:
