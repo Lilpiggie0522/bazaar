@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { sql } from "@vercel/postgres"
+import { db } from "@vercel/postgres"
 import { hashPassword } from "@/lib/utils"
 
 interface userRegister {
@@ -39,7 +39,8 @@ function checkUsername(username: string) {
 }
 
 async function dbUserQuery(username: string) {
-  const result = await sql `select * from players where username=${username}`
+  const client = await db.connect()
+  const result = await client.sql `select * from players where username=${username}`
   const rowNum = result.rowCount
   const rows = result.rows
   console.log(rows)
@@ -50,5 +51,6 @@ async function dbUserQuery(username: string) {
 }
 
 async function dbUserInsertion(username: string, password: string) {
-  await sql `INSERT INTO players (username, password) VALUES (${username}, ${password})`
+  const client = await db.connect()
+  await client.sql `INSERT INTO players (username, password) VALUES (${username}, ${password})`
 }
