@@ -1,4 +1,5 @@
-import { sql } from "@vercel/postgres"
+"use server"
+import { db } from "@vercel/postgres"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest) {
@@ -15,7 +16,8 @@ export async function POST(req: NextRequest) {
   const upload: string = body.upload
   const description: string = body.description
   try {
-    await sql `insert into items (name, type, level,
+    const client = await db.connect()
+    await client.sql `insert into items (name, type, level,
             enchantment, quantity, seller, sale_start, sale_end,
             price, description, status, image_url) 
             values (${name}, ${type}, ${level}, ${enchantment}, ${quantity}, ${seller}, ${sale_start}, ${sale_end}, ${price}, ${description}, ${null}, ${upload})`

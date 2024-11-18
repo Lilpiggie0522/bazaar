@@ -1,6 +1,6 @@
 "use server"
 import { NextRequest, NextResponse } from "next/server"
-import { sql } from "@vercel/postgres"
+import { db } from "@vercel/postgres"
 import { compare } from "bcrypt-ts"
 import { loginJwt } from "@/lib"
 
@@ -36,7 +36,8 @@ export async function POST(req: NextRequest) {
 async function dbCredentialCheck(body: loginRequestBody): Promise<boolean | string> {
   const { username, password } = body
   try {
-    const queryResult = await sql`SELECT password from players WHERE username=${username}`
+    const client = await db.connect()
+    const queryResult = await client.sql`SELECT password from players WHERE username=${username}`
     if (!queryResult.rowCount || queryResult.rows.length < 1) {
       // no query results, user does not exist, return false right away
       return false
@@ -47,7 +48,7 @@ async function dbCredentialCheck(body: loginRequestBody): Promise<boolean | stri
     if (!await compare(password, storedHash)) {
       return false
     }
-    const userIdResult = await sql `SELECT id from players WHERE username=${username}`
+    const userIdResult = await client.sql `SELECT id from players WHERE username=${username}`
     const userId = userIdResult.rows.find(item => item.id)?.id
     return userId
   } catch {
