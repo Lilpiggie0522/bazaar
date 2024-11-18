@@ -1,6 +1,5 @@
-"use server"
-import { db } from "@vercel/postgres"
 import { NextResponse } from "next/server"
+import { db } from "@vercel/postgres"
 export async function GET() {
   try {
     const client = await db.connect()
@@ -13,3 +12,5 @@ export async function GET() {
     throw Error("some db operation is wrong!")
   }
 }
+
+export const revalidate = 0

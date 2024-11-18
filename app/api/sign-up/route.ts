@@ -1,6 +1,5 @@
-"use server"
-import { NextRequest, NextResponse } from "next/server"
 import { db } from "@vercel/postgres"
+import { NextRequest, NextResponse } from "next/server"
 import { hashPassword } from "@/lib/utils"
 
 interface userRegister {

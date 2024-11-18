@@ -1,6 +1,5 @@
-"use server"
-import { NextRequest, NextResponse } from "next/server"
 import { db } from "@vercel/postgres"
+import { NextRequest, NextResponse } from "next/server"
 import { compare } from "bcrypt-ts"
 import { loginJwt } from "@/lib"
 
