@@ -6,6 +6,14 @@ name: continuous-deployment
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  POSTGRES_URL: ${{secrets.POSTGRES_URL}}
+  POSTGRES_PRISMA_URL: ${{secrets.POSTGRES_PRISMA_URL}}
+  POSTGRES_URL_NO_SSL: ${{secrets.POSTGRES_URL_NO_SSL}}
+  POSTGRES_URL_NON_POOLING: ${{secrets.POSTGRES_URL_NON_POOLING}}
+  POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+  POSTGRES_HOST: ${{secrets.POSTGRES_HOST}}
+  POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+  POSTGRES_DATABASE: ${{secrets.POSTGRES_DATABASE}}
 
 on:
   push:
@@ -26,7 +34,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm install
+    - run: npm ci
     - run: npm run lint
     - name: Install Vercel CLI
       run: npm install --global vercel@latest
