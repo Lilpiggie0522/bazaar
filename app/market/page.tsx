@@ -19,13 +19,15 @@ import {
   List,
   Image,
   Pagination,
-  App
+  App,
+  UploadFile
 } from "antd"
 
 import enUS from "antd/lib/locale/en_US"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Item } from "./[id]/page"
+import { UploadChangeParam } from "antd/es/upload"
 
 function MarketPageComponent() {
   const { message } = App.useApp()
@@ -33,12 +35,11 @@ function MarketPageComponent() {
   const [itemsPerPage] = useState(8)
 
   const ench = [{ value: "0", label: 0 }, { value: "1", label: 1 }, { value: "2", label: 2 }, { value: "3", label: 3 }, { value: "4", label: 4 }]
-  const itemTypes = [{ value: "armor", label: "Armor" }, { value: "weapon", label: "Weapon" }, { value: "resources", label: "Resources" }, { value: "materials", label: "Materials" }]
+  const itemTypes = [{ value: "armor", label: "Armor" }, { value: "weapon", label: "Weapon" }, { value: "resources", label: "Resources" }, { value: "materials", label: "Materials" }, { value: "consumables", label: "Consumables" }]
   const itemLevels = [{ value: "0", label: 0 }, { value: "1", label: 1 }, { value: "2", label: 2 }, { value: "3", label: 3 }, { value: "4", label: 4 }, { value: "5", label: 5 }, { value: "6", label: 6 }, { value: "7", label: 7 }, { value: "8", label: 8 }]
   const [cards, setCards] = useState<Item[]>([])
 
   const handlePageChange = (page: number) => {
-    console.log("page is " + page)
     setCurrentPage(page)
   }
 
@@ -76,13 +77,15 @@ function MarketPageComponent() {
     "item type": ItemTypes;
     "item level": ItemLevels;
     "enchantment": EnchantLevels;
-    "quantity": number;
+    "quantity": string;
     "seller": string;
     "dateRange": DateRange
-    "price": number;
-    "upload": File;
-    "description"?: string
+    "price": string;
+    "upload": UploadFile[];
+    "description": string
   }
+
+  const [file, setFile] = useState<File | null>(null)
 
   useEffect(() => {
     async function fetchCards() {
@@ -100,6 +103,10 @@ function MarketPageComponent() {
     fetchCards()
   }, [])
 
+  function handleOnChange(info: UploadChangeParam) {
+    setFile(info.fileList[0].originFileObj as File)
+  }
+
   async function handleOnSubmit(form: formValues) {
     const {
       "item name": itemName,
@@ -110,29 +117,27 @@ function MarketPageComponent() {
       "seller": seller,
       "dateRange": dateRange,
       "price": price,
-      "upload": upload,
-      "description": description   // optional
+      "description": description
     } = form
 
-    const formData = {
-      "name": itemName,
-      "type": itemType,
-      "level": parseInt(itemLevel),
-      "enchantment": parseInt(enchantment),
-      "quantity": quantity,
-      "seller": seller,
-      "dateRange": dateRange,
-      "price": price,
-      "upload": upload,
-      "description": description
+    const formData = new FormData()
+    formData.append("name", itemName)
+    formData.append("type", itemType)
+    formData.append("level", itemLevel)
+    formData.append("enchantment", enchantment)
+    formData.append("quantity", quantity)
+    formData.append("seller", seller)
+    formData.append("sale_start", dateRange[0])
+    formData.append("sale_end", dateRange[1])
+    formData.append("price", price)
+    formData.append("description", description)
+    if (file) {
+      formData.append("img", file)
     }
-
+    
     const response: Response = await fetch("/api/addItem", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(formData)
+      body: formData
     })
 
     if (!response.ok) {
@@ -140,13 +145,16 @@ function MarketPageComponent() {
       message.error(`${error.name}, code: ${error.code}`)
       return
     }
+    const link = await response.json()
+    console.log(link)
     message.success("Item listed")
+    window.location.reload()
   }
 
   const paginatedCards = cards.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
 
   return (
-    <div className='m-3 min-h-screen flex flex-col'>
+    <div className='min-h-screen flex flex-col m-2'>
       <div>
         <ConfigProvider locale={enUS}>
           <ModalForm
@@ -240,9 +248,10 @@ function MarketPageComponent() {
 
             <ProFormGroup>
               <ProFormMoney
-                label="Item Price"
+                label="Unit price"
                 name="price"
                 customSymbol="💰"
+                min={1}
                 rules={[{ required: true, message: "Item must have a price" }]}
               />
             </ProFormGroup>
@@ -253,10 +262,11 @@ function MarketPageComponent() {
                 title="Upload item picture"
                 name="upload"
                 label="Upload"
-                max={2}
+                max={1}
                 fieldProps={{
                   name: "image",
                 }}
+                onChange={handleOnChange}
               />
             </ProForm.Group>
             <ProFormTextArea
@@ -272,7 +282,7 @@ function MarketPageComponent() {
           </ModalForm>
         </ConfigProvider>
       </div>
-      <div className='mt-10'>
+      <div className="pt-2">
         <List
           grid={{ gutter: 32, column: 4 }}
           dataSource={paginatedCards}
@@ -309,7 +319,6 @@ function MarketPageComponent() {
           pageSize={itemsPerPage}
           total={cards.length}
           onChange={handlePageChange}
-          style={{ marginTop: "16px", textAlign: "center" }}
         />
       </div>
     </div>
