@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "i.imgur.com",
+        hostname: "fenwick-bazaar-bucket.s3.ap-southeast-2.amazonaws.com",
         port: "",
         pathname: "/**",
       },
