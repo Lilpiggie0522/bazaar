@@ -4,8 +4,7 @@ export async function GET() {
   try {
     const client = await db.connect()
     const status = "listed"
-    const res = await client.sql `SELECT * FROM items WHERE status=${status}`
-    console.log(res.rows)
+    const res = await client.sql `SELECT * FROM items WHERE status=${status}  order by sale_start desc`
     return NextResponse.json(res.rows, {headers: { "Cache-Control": "no-store" }})
   } catch (error) {
     console.log(error)

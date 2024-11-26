@@ -26,19 +26,22 @@ export async function POST(req: NextRequest) {
   const description = formData.get("description") as string
 
   const img = formData.get("img") as File
-  const suffix = img.type.split("/")[1]
-  const obj = await img.arrayBuffer()
-  const bucketName = "fenwick-bazaar-bucket"
-
-  await s3_client.send(
-    new PutObjectCommand({
-      Bucket: bucketName,
-      Key: `${uuidv4()}.${suffix}`,
-      Body: Buffer.from(obj),
-      ContentType: img.type
-    }),
-  )
-  const imageURL = `https://${bucketName}.s3.${region}.amazonaws.com/${uuidv4()}.${suffix}`
+  let imageURL = null
+  if (img) {
+    const suffix = img.type.split("/")[1]
+    const obj = await img.arrayBuffer()
+    const bucketName = "fenwick-bazaar-bucket"
+    const imgName = `${uuidv4()}.${suffix}`
+    await s3_client.send(
+      new PutObjectCommand({
+        Bucket: bucketName,
+        Key: imgName,
+        Body: Buffer.from(obj),
+        ContentType: img.type
+      }),
+    )
+    imageURL = `https://${bucketName}.s3.${region}.amazonaws.com/${imgName}`
+  }
 
   try {
     const client = await db.connect()
@@ -57,8 +60,8 @@ export async function POST(req: NextRequest) {
 // CREATE OR REPLACE FUNCTION update_item_status() 
 // RETURNS TRIGGER AS $$
 // BEGIN
-//   -- Check if the current date is between sale_start and sale_end
-//   IF CURRENT_DATE BETWEEN NEW.sale_start AND NEW.sale_end THEN
+//   -- Convert CURRENT_DATE to Australian Eastern Standard Time
+//   IF date(CURRENT_TIMESTAMP AT TIME ZONE 'Australia/Sydney') BETWEEN NEW.sale_start AND NEW.sale_end THEN
 //     -- If current date is within the range, set status to 'listed'
 //     NEW.status := 'listed';
 //   ELSE
