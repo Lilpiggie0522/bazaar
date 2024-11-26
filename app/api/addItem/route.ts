@@ -3,6 +3,15 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { v4 as uuidv4 } from "uuid"
 import { NextRequest, NextResponse } from "next/server"
 
+const region = "ap-southeast-2"
+const s3_client = new S3Client({
+  region: region,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "placeholder",
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "placeholder"
+  }
+})
+
 export async function POST(req: NextRequest) {
   const formData = await req.formData()
   const name = formData.get("name") as string
@@ -16,31 +25,20 @@ export async function POST(req: NextRequest) {
   const price = parseInt(formData.get("price") as string)
   const description = formData.get("description") as string
 
-
   const img = formData.get("img") as File
   const suffix = img.type.split("/")[1]
   const obj = await img.arrayBuffer()
   const bucketName = "fenwick-bazaar-bucket"
-  const region = "ap-southeast-2"
 
-  const s3_client = new S3Client({
-    region: region,
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || ""
-    }
-  })
-
-  const s3_file_name = `${uuidv4()}.${suffix}`
   await s3_client.send(
     new PutObjectCommand({
       Bucket: bucketName,
-      Key: s3_file_name,
+      Key: `${uuidv4()}.${suffix}`,
       Body: Buffer.from(obj),
       ContentType: img.type
     }),
   )
-  const imageURL = `https://${bucketName}.s3.${region}.amazonaws.com/${s3_file_name}`
+  const imageURL = `https://${bucketName}.s3.${region}.amazonaws.com/${uuidv4()}.${suffix}`
 
   try {
     const client = await db.connect()
