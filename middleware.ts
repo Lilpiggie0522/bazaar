@@ -2,24 +2,60 @@ import { NextResponse } from "next/server"
 import { NextRequest } from "next/server"
 import { decrypt } from "./lib"
 
+const allowedRequest = NextResponse.next()
+const declinedRequest = NextResponse.json("Not authorised to access!", { status: 401})
+
+const PROTECTED_ROUTES = [
+  {
+    path: "/market",
+    redirect: "/login"
+  }
+]
+
+const PROTECTED_APIs = [
+  {
+    path: "/api/addItem"
+  },
+  {
+    path: "/api/getItem"
+  },
+  {
+    path: "/api/addItems"
+  }
+]
+
+const LOGGED_IN_ROUTES = [
+  {
+    path: "/login",
+    redirect: "/market"
+  }
+]
+
 export async function middleware(request: NextRequest) {
   const path: string = request.nextUrl.pathname
     
   // Check if the user has a valid token
   const tokenValid = await tokenCheck(request)
 
-  // If accessing '/market' without a valid token, redirect to '/login'
-  if (path === "/market" && !tokenValid) {
-    return NextResponse.redirect(new URL("/login", request.url))
+  for (const api of PROTECTED_APIs) {
+    if (path.match(api.path) && !tokenValid) {
+      return declinedRequest
+    }
   }
 
-  // If accessing '/login' with a valid token, redirect to '/market'
-  if (path === "/login" && tokenValid) {
-    return NextResponse.redirect(new URL("/market", request.url))
+  for (const route of PROTECTED_ROUTES) {
+    if (path.match(route.path) && !tokenValid) {
+      return NextResponse.redirect(new URL(route.redirect, request.url))
+    }
   }
 
-  // Proceed as normal if no redirection is needed
-  return NextResponse.next()
+  for (const route of LOGGED_IN_ROUTES) {
+    if (path.match(route.path) && tokenValid) {
+      return NextResponse.redirect(new URL(route.redirect, request.url))
+    }
+  }
+
+  return allowedRequest
 }
 
 // Function to check if the session token is valid
@@ -30,8 +66,7 @@ async function tokenCheck(req: NextRequest): Promise<boolean> {
   }
 
   try {
-    const cookie = await decrypt(session)  // Attempt to decrypt and validate the session
-    console.log("Valid token found:", cookie)
+    await decrypt(session)  // Attempt to decrypt and validate the session
     return true
   } catch (error) {
     console.log("Invalid token:", error)
@@ -41,5 +76,5 @@ async function tokenCheck(req: NextRequest): Promise<boolean> {
 
 // Middleware config to match specific paths
 export const config = {
-  matcher: ["/market", "/login"],  // Apply this middleware to the /market and /login paths
+  matcher: ["/market", "/login", "/api"],  // Apply this middleware to the /market and /login paths
 }
