@@ -154,7 +154,7 @@ function MarketPageComponent() {
   const paginatedCards = cards.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
 
   return (
-    <div className='flex flex-col m-2'>
+    <div className='min-h-screen flex flex-col m-2'>
       <div>
         <ConfigProvider locale={enUS}>
           <ModalForm

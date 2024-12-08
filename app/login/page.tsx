@@ -79,12 +79,12 @@ const LoginPage = () => {
   }
 
   return (
-    <div className='min-h-full'>
+    <div className='min-h-screen'>
       {
         loggedIn &&
-                <div className="flex justify-center pt-5">
-                  <Alert severity="success" className="fixed">Login Successful!</Alert>
-                </div>
+        <div className="flex justify-center pt-5">
+          <Alert severity="success" className="fixed">Login Successful!</Alert>
+        </div>
       }
       <div className='py-20 flex flex-col justify-center items-center'>
         <div className='flex justify-center'>
@@ -100,9 +100,9 @@ const LoginPage = () => {
             </div>
             {
               showError &&
-                            <div className='mt-8'>
-                              <Alert severity="error" variant='outlined'>{errorMessage}</Alert>
-                            </div>
+              <div className='mt-8'>
+                <Alert severity="error" variant='outlined'>{errorMessage}</Alert>
+              </div>
             }
             <div className='pt-5 space-x-1'>
               <Button className='text-black font-sans' onClick={handleClickOpen} sx={{ textTransform: "none" }}>Forgot password?</Button>
@@ -127,12 +127,12 @@ const LoginPage = () => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-                        Too bad, I can&apos;t help you.
+            Too bad, I can&apos;t help you.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} autoFocus sx={{ fontFamily: "inherit" }}>
-                        OK Agree
+            OK Agree
           </Button>
         </DialogActions>
       </Dialog>
