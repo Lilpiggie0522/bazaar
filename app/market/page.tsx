@@ -134,7 +134,7 @@ function MarketPageComponent() {
     if (file) {
       formData.append("img", file)
     }
-    
+
     const response: Response = await fetch("/api/addItem", {
       method: "POST",
       body: formData
@@ -154,7 +154,7 @@ function MarketPageComponent() {
   const paginatedCards = cards.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
 
   return (
-    <div className='min-h-screen flex flex-col m-2'>
+    <div className='flex flex-col m-2'>
       <div>
         <ConfigProvider locale={enUS}>
           <ModalForm
@@ -299,13 +299,13 @@ function MarketPageComponent() {
                     alt='placeholder'
                   />
                   <div>
-                      Unit Price: {item.price}
+                    Unit Price: {item.price}
                   </div>
                   <div>
-                      Level: {item.level}
+                    Level: {item.level}
                   </div>
                   <div>
-                      Item Description: {item.description}
+                    Item Description: {item.description}
                   </div>
                 </Card>
               </Link>
@@ -313,13 +313,15 @@ function MarketPageComponent() {
           )}
         />
       </div>
-      <div className='bottom-0 absolute'>
-        <Pagination
-          current={currentPage}
-          pageSize={itemsPerPage}
-          total={cards.length}
-          onChange={handlePageChange}
-        />
+      <div className='bottom-0 relative w-full'>
+        <div className='flex justify-center'>
+          <Pagination
+            current={currentPage}
+            pageSize={itemsPerPage}
+            total={cards.length}
+            onChange={handlePageChange}
+          />
+        </div>
       </div>
     </div>
   )
